@@ -2,16 +2,19 @@ version: '3.8'
 services:
   db:
     image: postgres:12.4
-    volumes:
-      - postgres_data:/var/lib/postgressql/data
     env_file:
       - .env
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgressql/data
   frontend:
     build:
       context: ../frontend
       dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - db
   backend:
     build:
       context: ../backend
