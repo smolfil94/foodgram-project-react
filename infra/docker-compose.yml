@@ -13,7 +13,6 @@ services:
     volumes:
       - ../frontend/:/app/result_build/
   backend:
-    container_name: backend
     build:
       context: ../backend
       dockerfile: Dockerfile
