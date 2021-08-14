@@ -12,7 +12,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     volumes:
-      - ../frontend/:/app/result_build/
+      - result_build:/build
   backend:
     build:
       context: ../backend
@@ -43,5 +43,6 @@ services:
 
 volumes:
   postgres_data:
+  result_build:
   static_value:
   media_value:
