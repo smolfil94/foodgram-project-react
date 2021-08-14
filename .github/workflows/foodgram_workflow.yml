@@ -42,8 +42,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ../backend/ ../frontend/
-          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest ${{ secrets.DOCKER_USERNAME }}/frontend:v2.0
+          context: ../backend/
+          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
+
+      - name: Push to Dicker Hub
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: ../frontend/
+          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:v2.0
 
 
   deploy:
