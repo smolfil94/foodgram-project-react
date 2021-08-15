@@ -11,14 +11,14 @@ services:
       - ./.env
 
   frontend:
-    image: nikismol94/frontend
+    image: nikismol94/frontend:v2.0
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
       - db
 
   backend:
-    image: nikismol94/backend
+    image: nikismol94/backend:latest
     restart: always
     volumes:
       - static_value:/code/backend_static/
