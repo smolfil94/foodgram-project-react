@@ -8,17 +8,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgressql/data
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: nikismol94/frontend:v2.0
     volumes:
-      - result_build:/app/result_build/build
+      - ../frontend/:/app/result_build/
     depends_on:
       - db
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: nikismol94/backend:latest
     restart: always
     volumes:
       - static_value:/code/static/
@@ -45,6 +41,5 @@ services:
 
 volumes:
   postgres_data:
-  result_build:
   static_value:
   media_value:
