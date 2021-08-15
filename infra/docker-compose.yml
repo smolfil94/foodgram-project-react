@@ -16,7 +16,7 @@ services:
 
   backend:
     container_name: backend
-    image: nikismol94/foodgram:latest
+    image: nikismol94/backend:latest
     restart: always
     depends_on:
       - db
