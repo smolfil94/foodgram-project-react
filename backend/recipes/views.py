@@ -1,4 +1,4 @@
-import django_filters.rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -12,11 +12,12 @@ from rest_framework.views import APIView
 from .filters import RecipeFilter
 from .models import (Favorite, Ingredient, IngredientRecipe, Purchase, Recipe,
                      Subscribe, Tag)
+from .paginators import PageNumberPaginationModified
 from .permissions import AdminOrAuthorOrReadOnly
-from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
+from .serializers import (AddFavouriteRecipeSerializer, CreateRecipeSerializer,
                           IngredientSerializer, ListRecipeSerializer,
-                          PurchaseSerializer, ShowFollowersSerializer,
-                          SubscribeSerializer, TagSerializer)
+                          ShowFollowersSerializer, TagSerializer,
+                          UserSerializer)
 
 User = get_user_model()
 
@@ -30,13 +31,13 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend]
     filter_class = RecipeFilter
-    pagination_class = PageNumberPagination
+    pagination_class = PageNumberPaginationModified
     permission_classes = [AdminOrAuthorOrReadOnly]
 
     def get_serializer_class(self):
-        if self.action in ['list']:
+        if self.action in ['list', 'retrieve']:
             return ListRecipeSerializer
         return CreateRecipeSerializer
 
@@ -59,7 +60,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 @permission_classes([IsAuthenticated])
 def show_subscribs(request):
     user_ubj = User.objects.filter(following__user=request.user)
-    paginator = PageNumberPagination
+    paginator = PageNumberPagination()
     paginator.page_size = 10
     result_page = paginator.paginate_queryset(user_ubj, request)
     serializer = ShowFollowersSerializer(
@@ -79,7 +80,7 @@ class SubscribeView(APIView):
             'user': user.id,
             'author': author_id
         }
-        serializer = SubscribeSerializer(
+        serializer = UserSerializer(
             data=data, context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
@@ -106,7 +107,7 @@ class FavoriteViewSet(APIView):
             'user': user,
             'recipe_id': recipe_id
         }
-        serializer = FavoriteSerializer(
+        serializer = AddFavouriteRecipeSerializer(
             data=data, context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
@@ -136,7 +137,7 @@ class PurchaseListView(APIView):
             'user': user,
             'recipe_id': recipe_id
         }
-        serializer = PurchaseSerializer(
+        serializer = AddFavouriteRecipeSerializer(
             data=data,
             context={'request': request}
         )
