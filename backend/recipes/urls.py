@@ -7,7 +7,7 @@ from .views import (DownloadPurchaseList, FavoriteViewSet, IngredientViewSet,
 
 router = DefaultRouter()
 
-router.register('tag', TagsViewSet, basename='tag')
+router.register('tags', TagsViewSet, basename='tags')
 router.register('recipe', RecipeViewSet, basename='recipe')
 router.register('ingredients', IngredientViewSet, basename='ingredients')
 
