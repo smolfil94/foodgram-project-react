@@ -157,31 +157,26 @@ class PurchaseListView(APIView):
 class DownloadPurchaseList(APIView):
 
     def get(self, request):
-        user = request.user
-        shopping_cart = user.purchases.all()
+        shopping_cart = request.user.purchases.all()
         purchase_list = {}
-        for record in shopping_cart:
-            recipe = record.recipe
-            ingredients = IngredientRecipe.objects.filter(recipe=recipe)
+        for purchase in shopping_cart:
+            ingredients = purchase.recipe.recipeingredient_set.all()
             for ingredient in ingredients:
-                amount = ingredient.amout
                 name = ingredient.ingredient.name
-                measurement_unit = ingredient.ingredient.measurement_unit
-                if name is not purchase_list:
+                amount = ingredient.amount
+                unit = ingredient.ingredient.measurement_unit
+                if name not in purchase_list:
                     purchase_list[name] = {
-                        'measurement_unit': measurement_unit,
-                        'amount': amount
+                        'amount': amount,
+                        'unit': unit
                     }
                 else:
-                    purchase_list[name]['amount'] = (
-                        purchase_list[name]['amount'] + amount
-                    )
+                    purchase_list[name]['amount'] = (purchase_list[name]
+                                                     ['amount'] + amount)
         wishlist = []
         for item in purchase_list:
-            wishlist.append(
-                f'{item} - {purchase_list[item]["amount"]}'
-                f'{purchase_list[item]["measurement_unit"]}/n'
-            )
+            wishlist.append(f'{item} ({purchase_list[item]["unit"]}) — '
+                            f'{purchase_list[item]["amount"]} \n')
         wishlist.append('/n')
         wishlist.append('FoodGram, 2021')
         response = HttpResponse(wishlist, 'Content-Type: application/pdf')
