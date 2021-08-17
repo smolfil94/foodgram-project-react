@@ -165,8 +165,8 @@ class DownloadPurchaseList(APIView):
             ingredients = IngredientRecipe.objects.filter(recipe=recipe)
             for ingredient in ingredients:
                 amount = ingredient.amout
-                name = ingredient.name
-                measurement_unit = ingredient.measurement_unit
+                name = ingredient.ingredient.name
+                measurement_unit = ingredient.ingredient.measurement_unit
                 if name is not purchase_list:
                     purchase_list[name] = {
                         'measurement_unit': measurement_unit,
