@@ -57,10 +57,10 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['get'])
 def show_subscribs(request):
-    user_ubj = User.objects.filter(following__user=request.user)
+    user_obj = User.objects.filter(following__user=request.user)
     paginator = PageNumberPagination()
     paginator.page_size = 10
-    result_page = paginator.paginate_queryset(user_ubj, request)
+    result_page = paginator.paginate_queryset(user_obj, request)
     serializer = SubscribersSerializer(
         result_page,
         many=True,
@@ -71,11 +71,11 @@ def show_subscribs(request):
 
 class SubscribeView(APIView):
 
-    def get(self, request, author_id):
+    def get(self, request, user_id):
         user = request.user
         data = {
             'user': user.id,
-            'author': author_id
+            'author': user_id
         }
         serializer = SubscribeSerializer(
             data=data, context={'request': request}
@@ -84,12 +84,12 @@ class SubscribeView(APIView):
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
-    def delete(self, request, author_id):
+    def delete(self, request, user_id):
         user = request.user
         follow = get_object_or_404(
             Subscribe,
             user=user,
-            author_id=author_id
+            author_id=user_id
         )
         follow.delete()
         return Response('Подписка удалена', status.HTTP_204_NO_CONTENT)
