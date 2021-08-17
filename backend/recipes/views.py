@@ -98,7 +98,7 @@ class SubscribeView(APIView):
 class FavoriteViewSet(APIView):
 
     def get(self, request, recipe_id):
-        user = request.user
+        user = request.user.id
         data = {
             'user': user,
             'recipe_id': recipe_id
@@ -127,7 +127,7 @@ class FavoriteViewSet(APIView):
 class PurchaseListView(APIView):
 
     def get(self, request, recipe_id):
-        user = request.user
+        user = request.user.id
         data = {
             'user': user,
             'recipe_id': recipe_id
