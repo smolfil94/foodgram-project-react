@@ -158,7 +158,7 @@ class DownloadPurchaseList(APIView):
 
     def get(self, request):
         user = request.user
-        shopping_cart = user.purchase.all()
+        shopping_cart = user.purchases.all()
         purchase_list = {}
         for record in shopping_cart:
             recipe = record.recipe
