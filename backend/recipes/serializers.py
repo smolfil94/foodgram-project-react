@@ -191,11 +191,11 @@ class PurchaseListSerializer(serializers.ModelSerializer):
         if (request.method == 'GET'
                 and PurchaseList.objects.filter(
                     user=request.user,
-                    recipe=attr['recipe'])):
+                    recipe=attrs['recipe'])):
             raise serializers.ValidationError(
                 'Вы уже добавили рецепт в список покупок'
             )
-        return attr
+        return attrs
 
     def to_representation(self, instance):
         return RecipeShortSerializer(
