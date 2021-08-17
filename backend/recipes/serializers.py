@@ -230,19 +230,19 @@ class SubscribeSerializer(serializers.ModelSerializer):
         model = Subscribe
         fields = '__all__'
 
-    def validate(self, attrs):
+    def validate(self, data):
         request = self.context['request']
         if request.method == 'GET':
-            if request.user == attrs['author']:
+            if request.user == data['author']:
                 raise serializers.ValidationError(
                     'Невозможно подписаться на себя'
                 )
             if Subscribe.objects.filter(
                     user=request.user,
-                    author=attrs['author']
+                    author=data['author']
             ).exists():
                 raise serializers.ValidationError('Вы уже подписаны')
-        return attrs
+        return data
 
     def to_representation(self, instance):
         return SubscribersSerializer(

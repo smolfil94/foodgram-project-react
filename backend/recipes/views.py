@@ -84,12 +84,12 @@ class SubscribeView(APIView):
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
-    def delete(self, request, user_id):
+    def delete(self, request, author_id):
         user = request.user
         follow = get_object_or_404(
             Subscribe,
             user=user,
-            author_id=user_id
+            author_id=author_id
         )
         follow.delete()
         return Response('Подписка удалена', status.HTTP_204_NO_CONTENT)
