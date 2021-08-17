@@ -181,6 +181,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class PurchaseListSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PurchaseList
         fields = '__all__'
