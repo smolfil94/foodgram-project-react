@@ -161,17 +161,17 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = '__all__'
 
-    def validate(self, data):
+    def validate(self, attrs):
         request = self.context['request']
         if (request.method == 'GET'
                 and Favorite.objects.filter(
                     user=request.user,
-                    recipe=data['recipe']
+                    recipe=attrs['recipe']
                 ).exists()):
             raise serializers.ValidationError(
                 'Рецепт уже добавлен в избранное'
             )
-        return data
+        return attrs
 
     def to_representation(self, instance):
         return RecipeShortSerializer(
@@ -186,16 +186,16 @@ class PurchaseListSerializer(serializers.ModelSerializer):
         model = PurchaseList
         fields = '__all__'
 
-    def validate(self, data):
+    def validate(self, attrs):
         request = self.context['request']
         if (request.method == 'GET'
                 and PurchaseList.objects.filter(
                     user=request.user,
-                    recipe=data['recipe'])):
+                    recipe=attr['recipe'])):
             raise serializers.ValidationError(
                 'Вы уже добавили рецепт в список покупок'
             )
-        return data
+        return attr
 
     def to_representation(self, instance):
         return RecipeShortSerializer(
@@ -231,19 +231,19 @@ class SubscribeSerializer(serializers.ModelSerializer):
         model = Subscribe
         fields = '__all__'
 
-    def validate(self, data):
+    def validate(self, attrs):
         request = self.context['request']
         if request.method == 'GET':
-            if request.user == data['author']:
+            if request.user == attrs['author']:
                 raise serializers.ValidationError(
                     'Невозможно подписаться на себя'
                 )
             if Subscribe.objects.filter(
                     user=request.user,
-                    author=data['author']
+                    author=attrs['author']
             ).exists():
                 raise serializers.ValidationError('Вы уже подписаны')
-        return data
+        return attrs
 
     def to_representation(self, instance):
         return SubscribersSerializer(
