@@ -33,7 +33,7 @@ class Recipe(models.Model):
     author = models.CharField(
         User,
         on_delete=models.CASCADE,
-        related_date='recipes'
+        related_name='recipes'
     )
     name = models.CharField('Название', max_length=256)
     text = models.TextField('Описание')
