@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
 
 from .models import (Favorite, Ingredient, IngredientRecipe, Purchase, Recipe,
                      Subscribe, Tag)
@@ -45,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
                 and Subscribe.objects.filter(
                     user=user, author=author).exists()):
             raise serializers.ValidationError('Вы уже подписаны')
+        return data
 
 
 class AddFavouriteRecipeSerializer(serializers.ModelSerializer):
@@ -63,12 +63,6 @@ class AddFavouriteRecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Рецепт уже добавлен в избранное'
                 )
-            recipe = get_object_or_404(Recipe, id=recipe_id)
-
-            if (self.context['request'].method == 'DELETE'
-                    and Favorite.objeacts.filter(
-                        user=user, recipe=recipe).exists()):
-                raise serializers.ValidationError()
             return data
 
 
