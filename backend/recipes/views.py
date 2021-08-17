@@ -160,7 +160,7 @@ class DownloadPurchaseList(APIView):
         shopping_cart = request.user.purchases.all()
         purchase_list = {}
         for purchase in shopping_cart:
-            ingredients = purchase.recipe.recipeingredient_set.all()
+            ingredients = purchase.recipe.ingredientrecipe_set.all()
             for ingredient in ingredients:
                 name = ingredient.ingredient.name
                 amount = ingredient.amount
