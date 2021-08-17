@@ -46,7 +46,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         verbose_name='Ингредиенты',
-        through='RecipeIngredient'
+        through='IngredientRecipe'
     )
     image = models.ImageField(
         upload_to='recipes/images/',
