@@ -101,7 +101,7 @@ class FavoriteViewSet(APIView):
         user = request.user.id
         data = {
             'user': user,
-            'recipe_id': recipe_id
+            'recipe': recipe_id
         }
         serializer = FavoriteSerializer(
             data=data, context={'request': request}
@@ -115,7 +115,7 @@ class FavoriteViewSet(APIView):
         favorite_recipe = get_object_or_404(
             Favorite,
             user=user,
-            recipe_id=recipe_id
+            recipe__id=recipe_id
         )
         favorite_recipe.delete()
         return Response(
@@ -130,7 +130,7 @@ class PurchaseListView(APIView):
         user = request.user.id
         data = {
             'user': user,
-            'recipe_id': recipe_id
+            'recipe': recipe_id
         }
         serializer = PurchaseListSerializer(
             data=data,
@@ -145,7 +145,7 @@ class PurchaseListView(APIView):
         purchace_list_recipe = get_object_or_404(
             PurchaseList,
             user=user,
-            recipe_id=recipe_id
+            recipe__id=recipe_id
         )
         purchace_list_recipe.delete()
         return Response(
