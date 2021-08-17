@@ -45,6 +45,10 @@ class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     amount = serializers.IntegerField()
 
+    class Meta:
+        model = Ingredient
+        fields = ('id', 'amount')
+
 
 class RecipeListSerializer(serializers.ModelSerializer):
     author = UserSerializer()
