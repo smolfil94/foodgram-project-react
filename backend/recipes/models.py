@@ -7,7 +7,7 @@ User = get_user_model()
 class Tag(models.Model):
     name = models.CharField('Название', max_length=50)
     color = models.CharField('Цвет', max_length=50)
-    slug = models.SlugField('Слаг', unique=True)
+    slug = models.SlugField('Ссылка', unique=True)
 
     class Meta:
         verbose_name = 'Тег'
@@ -30,26 +30,28 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    author = models.CharField(
+    author = models.ForeignKey(
         User,
+        verbose_name='Автор',
         on_delete=models.CASCADE,
         related_name='recipes'
     )
-    name = models.CharField('Название', max_length=256)
+    name = models.CharField('Название', max_length=200)
     text = models.TextField('Описание')
     tags = models.ManyToManyField(
         Tag,
+        verbose_name='Теги',
         related_name='recipes'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        through='IngredientRecipe'
+        verbose_name='Ингредиенты',
+        through='RecipeIngredient'
     )
     image = models.ImageField(
         upload_to='recipes/images/',
         blank=True,
         null=True,
-        verbose_name='Изображение'
     )
     pub_date = models.DateTimeField(
         'Дата публикации',
