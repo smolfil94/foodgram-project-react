@@ -1,4 +1,4 @@
-![Django-app workflow](https://github.com/smolfil94/foodgram-project-react/actions/workflows/yamdb_workflow.yml/badge.svg)
+![example_workflow](https://github.com/smolfil94/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 # Продуктовый помощник Foodgram.
 
@@ -65,11 +65,14 @@
 ##Данные для входа:
 
 ###Суперпользователь:
-**email: admin@admin.ru
-**password: 18Kris02
 
-###Тестовый пользователь
-**email: test@test.ru
-**password: 18Kris02
+* email: admin@admin.ru
+* password: 18Kris02
 
-#### Проект разработан [Никитой Филипенковым](https://github.com/smolfil94)
+###Тестовый пользователь:
+
+* email: test@test.ru
+* password: 18Kris02
+
+####Разработчик: 
+* [Никитa Филипенков](https://github.com/smolfil94)
