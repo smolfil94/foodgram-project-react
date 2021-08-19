@@ -45,7 +45,6 @@
 ## Первоначальная настройка Django:
 
 ```
-- sudo docker-compose exec backend python manage.py makemigrations --noinput
 - sudo docker-compose exec backend python manage.py migrate --noinput
 - sudo docker-compose exec backend python manage.py collectstatic --no-input
 ```
