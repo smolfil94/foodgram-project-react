@@ -33,7 +33,7 @@
 - DB_HOST=db
 - DB_PORT=5432
 ```
-##Запуск проекта:
+## Запуск проекта:
  * Установите Докер
  * Перейдите в папку в проекте infra/
  * Выполните команду:
@@ -42,7 +42,7 @@
 - docker-compose up -d --build
 ```
 
-##Первоначальная настройка Django:
+## Первоначальная настройка Django:
 
 ```
 - sudo docker-compose exec backend python manage.py makemigrations --noinput
@@ -50,29 +50,29 @@
 - sudo docker-compose exec web python manage.py collectstatic --no-input
 ```
 
-##Создание суперпользователя:
+## Создание суперпользователя:
 ```
 - sudo docker-compose exec web python manage.py createsuperuser
 ```
 
-##После каждого обновления репозитория (git push) происходит следующее:
+## После каждого обновления репозитория (git push) происходит следующее:
 
  * Проверка кода на соответствие стандарту PEP8 (с помощью пакета flake8)
  * Сборка и доставка докер-образов на Docker Hub
  * Автоматический деплой
  * Отправка уведомления в Telegram
 
-##Данные для входа:
+## Данные для входа:
 
-###Суперпользователь:
+### Суперпользователь:
 
 * email: admin@admin.ru
 * password: 18Kris02
 
-###Тестовый пользователь:
+### Тестовый пользователь:
 
 * email: test@test.ru
 * password: 18Kris02
 
-####Разработчик: 
+## Разработчик: 
 * [Никитa Филипенков](https://github.com/smolfil94)
