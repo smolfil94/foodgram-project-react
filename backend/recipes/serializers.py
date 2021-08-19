@@ -96,24 +96,25 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = '__all__'
-        read_only_fields = ('author', )
+        read_only_fields = ('author',)
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
+
         for ingredient in ingredients:
-            if ingredient['amount'] <= 0:
-                raise serializers.ValidationError(
-                    'Количество ингредиента должно быть больше нуля!'
-                )
+            if ingredient['amount'] < 0:
+                raise serializers.ValidationError('Количество ингредиента '
+                                                  'не может быть '
+                                                  'отрицательным числом.')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         for ingredient in ingredients:
             obj = get_object_or_404(Ingredient, id=ingredient['id'])
             amount = ingredient['amount']
             if IngredientRecipe.objects.filter(
-                recipe=recipe,
-                ingredient=obj
+                    recipe=recipe,
+                    ingredient=obj
             ).exists():
                 amount += F('amount')
             IngredientRecipe.objects.update_or_create(
@@ -126,20 +127,26 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'ingredients' in self.initial_data:
             ingredients = validated_data.pop('ingredients')
+
             for ingredient in ingredients:
-                if ingredient['amount'] <= 0:
-                    raise serializers.ValidationError(
-                        'Количество ингредиента должно быть больше нуля!'
-                    )
+                if ingredient['amount'] < 0:
+                    raise serializers.ValidationError('Количество ингредиента '
+                                                      'не может быть '
+                                                      'отрицательным числом.')
             instance.ingredients.clear()
             for ingredient in ingredients:
-                IngredientRecipe.objects.create(
+                obj = get_object_or_404(Ingredient,
+                                        id=ingredient['id'])
+                amount = ingredient['amount']
+                if IngredientRecipe.objects.filter(
+                        recipe=instance,
+                        ingredient=obj
+                ).exists():
+                    amount += F('amount')
+                IngredientRecipe.objects.update_or_create(
                     recipe=instance,
-                    ingredient=get_object_or_404(
-                        Ingredient,
-                        id=ingredient['id']
-                    ),
-                    amount=ingredient['amount']
+                    ingredient=obj,
+                    defaults={'amount': amount}
                 )
         if 'tags' in self.initial_data:
             tags = validated_data.pop('tags')
@@ -154,6 +161,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        return RecipeListSerializer(
+            instance,
+            context={'request': self.context.get('request')}
+        ).data
+
 
     def to_representation(self, instance):
         return RecipeListSerializer(
