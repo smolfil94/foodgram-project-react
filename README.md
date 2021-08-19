@@ -15,7 +15,7 @@
 * postgres - образ базы данных PostgreSQL v 12.04
 * nginx
 
-##Команда клонирования репозитория:
+## Команда клонирования репозитория:
 
 ```
 - git clone https://github.com/smolfil94/foodgram-project-react.git
